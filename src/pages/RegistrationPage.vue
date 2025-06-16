@@ -1,9 +1,12 @@
 <template>
-  <div></div>
+    <registration-form />
 </template>
 
 <script>
-//import { auth, db } from './firebase.js'
-
-export default {}
+import RegistrationForm from '@/components/DynamicForm.vue'
+export default {
+  components: {
+    RegistrationForm,
+  },
+}
 </script>
