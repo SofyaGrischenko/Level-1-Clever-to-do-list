@@ -10,6 +10,7 @@ export default {}
 
 <style scoped>
 .base-button {
+  min-width: 200px;
   width: 10vw;
   height: 6vh;
   border: 2px solid;

@@ -11,6 +11,17 @@ export const login = async (user) => {
 
     return userCredentials
   } catch (error) {
-    console.log(error)
+    console.log(error.message)
+
+    let errorMessage = 'Error occured'
+
+    switch (error.code) {
+      case 'auth/invalid-email':
+        errorMessage = 'Please enter valid Email'; break;
+      case 'auth/invalid-credential':
+        errorMessage = 'Please enter valid email and password'; break;
+    }
+
+    throw new Error(errorMessage)
   }
 }

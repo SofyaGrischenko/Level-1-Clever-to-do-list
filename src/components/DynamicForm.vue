@@ -2,6 +2,9 @@
   <form class="form-wrapper">
     <h1 v-if="formType === 'registration'" class="form__title">Sign Up</h1>
     <h1 v-else class="form__title">Sign In</h1>
+
+    <p v-if="currentError" class="form__error">Invalid data: {{ currentError }}</p>
+
     <div class="form__inputs">
       <base-input
         v-for="(item, index) of currentInputs"
@@ -62,6 +65,7 @@ export default {
           model: 'password',
         },
       ],
+      currentError: '',
     }
   },
 
@@ -84,10 +88,15 @@ export default {
         password: this.formValues.password,
       }
 
-      if (this.formType === 'registration') {
-        await registration(user)
-      } else if (this.formType === 'login') {
-        await login(user)
+      try {
+        if (this.formType === 'registration') {
+          await registration(user)
+        } else if (this.formType === 'login') {
+          await login(user)
+        }
+      } catch (error) {
+        this.currentError = error.message
+        console.log(this.currentError)
       }
 
       this.formValues.name = ''
@@ -101,13 +110,14 @@ export default {
 <style scoped>
 .form-wrapper {
   background-color: #ed6b34;
-  width: 35vw;
-  height: 50vh;
-  margin: 20vh auto;
+  width: 40vw;
+  height: 55vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2%;
+  border-radius: 2px;
 }
 
 .form__title {
@@ -118,6 +128,8 @@ export default {
 .form__inputs {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
   width: 70%;
   margin: 40px auto;
   gap: 20px;
@@ -126,5 +138,17 @@ export default {
 .form__buttons {
   display: flex;
   justify-content: center;
+}
+
+.form__error {
+  max-width: 400px;
+  margin: 10px;
+  padding: 5px;
+  border: 3px solid red;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 20px;
+  background-color: #ff000040;
+  color: #ffffff;
 }
 </style>
