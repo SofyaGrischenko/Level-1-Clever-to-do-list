@@ -1,16 +1,55 @@
 <template>
   <div class="page-wrapper">
-    <registration-form formType="registration" />
+    <dynamic-form :inputs="inputs" @submit="submitForm" :title="'Sign up'" />
     <span>Already have an account?</span>
     <router-link to="/login">sign in</router-link>
   </div>
 </template>
 
 <script>
-import RegistrationForm from '@/components/DynamicForm.vue'
+import DynamicForm from '@/components/DynamicForm.vue'
+import { registration } from '@/services/api/registration'
+
 export default {
   components: {
-    RegistrationForm,
+    DynamicForm,
+  },
+
+  data() {
+    return {
+      inputs: [
+        {
+          type: 'email',
+          placeholder: 'Email',
+          field: 'email',
+          value: null,
+        },
+        {
+          type: 'password',
+          placeholder: 'Password',
+          field: 'password',
+          value: null,
+        },
+        {
+          type: 'password',
+          placeholder: 'Confirm password',
+          field: 'passwordConfirm',
+          value: null,
+        },
+      ],
+    }
+  },
+
+  methods: {
+    async submitForm(formValue) {
+      try {
+        await registration(formValue)
+        
+        console.log(formValue)
+      } catch (error) {
+        console.error(error)
+      }
+    },
   },
 }
 </script>

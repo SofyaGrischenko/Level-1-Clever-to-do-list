@@ -1,23 +1,13 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-// import { doc, setDoc } from 'firebase/firestore'
 import { auth } from '@/services/firebase'
-import router from '@/router'
 
 export const registration = async (user) => {
   try {
-    // create user in Firebase Authentication
     await createUserWithEmailAndPassword(auth, user.email, user.password)
 
-    // await setDoc(doc(database, 'users', user.uid), {
-    //   name: user.name,
-    //   email: user.email,
-    //   createdAt: new Date(),
-    // })
-
-    router.push('/tasks') //redirect to tasks page
   } catch (error) {
     //firebase errors
-    let errorMessage = 'Error occured'
+    let errorMessage = 'Please try again'
 
     switch (error.code) {
       case 'auth/invalid-email':

@@ -1,7 +1,10 @@
-const routes = [
+export const routes = [
   {
     path: '/registration',
     component: () => import('@/pages/RegistrationPage.vue'),
+    meta: {
+      isAuth: false
+    }
   },
   {
     path: '/login',
@@ -10,6 +13,9 @@ const routes = [
   {
     path: '/tasks',
     component: () => import('@/pages/DashboardPage.vue'),
+    meta: {
+      isAuth: true
+    }
   },
   {
     path: '/tasks/:id',
@@ -18,12 +24,9 @@ const routes = [
   {
     path: '/',
     redirect: '/tasks',
-    //check userr auth
   },
   {
     path: '/:pathMatch(.*)*',
     component: () => import('@/pages/NotFoundPage.vue'),
   },
 ]
-
-export default routes
