@@ -1,19 +1,15 @@
 <template>
   <input
-    :value="inputValue"
-    @input="$emit('update:inputValue', $event.target.value)"
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
     class="base-input"
   />
 </template>
 
 <script>
 export default {
-  props: {
-    inputValue: {
-      type: String,
-    },
-  },
-  emits: ['update:inputValue'],
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
   methods: {},
 }
 </script>

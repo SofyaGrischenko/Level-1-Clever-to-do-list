@@ -1,5 +1,5 @@
 <template>
-    <registration-form />
+    <registration-form formType="registration"/>
 </template>
 
 <script>
