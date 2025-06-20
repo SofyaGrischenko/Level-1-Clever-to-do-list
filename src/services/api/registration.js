@@ -1,18 +1,40 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '@/services/firebase'
-import router from '@/router'
+import { doc, setDoc} from 'firebase/firestore'
+import { auth, db } from '@/services/firebase'
 
 export const registration = async (user) => {
-  console.log('user', user)
-  console.log('auth', auth)
+  // const q = query(collection(db, 'users'))
+  // const querySnapshot = await getDocs(q)
+  // querySnapshot.forEach((doc) => {
+  //   console.log(doc.id, ' => ', doc.data())
+  // })
 
   try {
-    // create user in Firebase Authentication
     const userCredentials = await createUserWithEmailAndPassword(auth, user.email, user.password)
-    console.log('auth', userCredentials)
-   
-    router.push('/tasks') //redirect to tasks page
+
+    await setDoc(doc(db, 'users', userCredentials.user.uid), {
+      email: user.email,
+      tasks: [],
+      createdAt: new Date(),
+    })
+
+    return userCredentials.user
   } catch (error) {
-    console.log(error) //firebase errors
+    let errorMessage = 'Registration Error'
+
+    switch (error.code) {
+      case 'auth/invalid-email':
+        errorMessage = 'Please enter valid email'
+        break
+      case 'auth/missing-password':
+        errorMessage = ''
+        break
+      case 'auth/weak-password':
+        errorMessage = 'password must be 6 or more characters'
+        break
+    }
+    console.log(error.code)
+
+    throw new Error(errorMessage)
   }
 }
