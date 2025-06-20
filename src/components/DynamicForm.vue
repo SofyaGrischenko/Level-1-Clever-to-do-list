@@ -2,7 +2,9 @@
   <form class="form-wrapper">
     <h1 v-if="title" class="form__title">{{ title }}</h1>
 
-    <p v-if="currentError" class="form__error">{{ currentError }}</p>
+    <p v-if="currentErrors?.length" class="form__error">
+      {{ currentErrors[0] }}
+    </p>
 
     <div class="form__inputs">
       <base-input
@@ -48,17 +50,27 @@ export default {
 
   data() {
     return {
-      currentError: '',
+      currentErrors: [],
+      isValid: false,
     }
   },
 
   methods: {
     async handleSubmit() {
+      this.currentErrors = []
       const form = this.inputs.reduce((acc, input) => {
+        if (input?.validations?.length) {
+          for (let rule of input.validations) {
+            if (rule?.rule && !rule.rule(input.value)) {
+              this.currentErrors.push(rule.errorMessage)
+            }
+          }
+        }
         acc[input.field] = input.value
         return acc
       }, {})
-      this.$emit('submit', form)
+
+      if (!this.currentErrors?.length) this.$emit('submit', form)
     },
   },
 }
@@ -95,6 +107,7 @@ export default {
 .form__buttons {
   display: flex;
   justify-content: center;
+  color: #fafafa;
 }
 
 .form__error {

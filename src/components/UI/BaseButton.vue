@@ -12,7 +12,7 @@
   border: 2px solid;
   border-radius: 6px;
   background-color: transparent;
-  color: #fafafa;
+  color: inherit;
   font-size: 150%;
   font-weight: 600;
   letter-spacing: 3px;

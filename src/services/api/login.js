@@ -5,13 +5,11 @@ import { auth } from '../firebase'
 export const login = async (user) => {
   try {
     const userCredentials = await signInWithEmailAndPassword(auth, user.email, user.password)
-
-    
     console.log(userCredentials)
 
-    return userCredentials
+    return userCredentials.user
   } catch (error) {
-    let errorMessage = 'Please try again'
+    let errorMessage = 'Login Error'
 
     switch (error.code) {
       case 'auth/invalid-email':

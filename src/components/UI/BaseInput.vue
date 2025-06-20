@@ -10,7 +10,6 @@
 export default {
   props: ['modelValue'],
   emits: ['update:modelValue'],
-  methods: {},
 }
 </script>
 
