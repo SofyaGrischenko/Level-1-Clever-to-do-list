@@ -1,24 +1,20 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc, collection, query, getDocs } from 'firebase/firestore'
+import { doc, setDoc} from 'firebase/firestore'
 import { auth, db } from '@/services/firebase'
 
 export const registration = async (user) => {
-  // const userCollectionRef = collection(db, 'users')
-
-  // console.log('COLLECTION', userCollectionRef)
-  const q = query(collection(db, 'users'))
-  const querySnapshot = await getDocs(q)
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data())
-  })
+  // const q = query(collection(db, 'users'))
+  // const querySnapshot = await getDocs(q)
+  // querySnapshot.forEach((doc) => {
+  //   console.log(doc.id, ' => ', doc.data())
+  // })
 
   try {
     const userCredentials = await createUserWithEmailAndPassword(auth, user.email, user.password)
-    console.log('Credentials', userCredentials)
 
-    await setDoc(doc(db, 'userCollectionRef', userCredentials.user.uid), {
+    await setDoc(doc(db, 'users', userCredentials.user.uid), {
       email: user.email,
-      //tasks: [],
+      tasks: [],
       createdAt: new Date(),
     })
 

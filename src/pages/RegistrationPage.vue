@@ -8,7 +8,6 @@
 
 <script>
 import DynamicForm from '@/components/DynamicForm.vue'
-import router from '@/router'
 import { registration } from '@/services/api/registration'
 import { required, minLength, isEmail, isSame } from '@/utils/validations'
 
@@ -81,7 +80,7 @@ export default {
       try {
         const user = await registration(formValue)
         localStorage.setItem('idToken', user.accessToken)
-        router.push('/')
+        this.$router.push('/')
       } catch (error) {
         console.error(error)
       }
