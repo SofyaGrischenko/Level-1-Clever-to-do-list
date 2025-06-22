@@ -1,15 +1,6 @@
 <template>
   <div class="calendar-day__wrap" :day="day">
-    <div
-      v-if="day"
-      :class="{
-        'calendar-day': true,
-        selected: day && selected,
-        current: day && isToday,
-        disabled: day && disabled,
-      }"
-      @click="handleClick"
-    >
+    <div v-if="day" :class="styles" @click="handleClick">
       <p>
         {{ day.getDate() }}
       </p>
@@ -41,6 +32,15 @@ export default {
       if (!this.day) return
       const today = new Date()
       return this.day.toDateString() === today.toDateString()
+    },
+
+    styles() {
+      return {
+        'calendar-day': true,
+        selected: this.day && this.selected,
+        current: this.day && this.isToday,
+        disabled: this.day && this.disabled,
+      }
     },
   },
 

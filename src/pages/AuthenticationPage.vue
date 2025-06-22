@@ -8,7 +8,7 @@
 
 <script>
 import DynamicForm from '@/components/DynamicForm.vue'
-import { login } from '@/services/api/login'
+import { login } from '@/services/api/auth'
 import { required, isEmail, minLength } from '@/utils/validations'
 export default {
   components: {

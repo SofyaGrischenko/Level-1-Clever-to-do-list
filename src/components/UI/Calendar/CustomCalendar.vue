@@ -1,11 +1,10 @@
 <template>
   <div class="calendar">
     <div class="calendar-header">
-      <!-- TODO: BaseButton -->
-      <button class="calendar-header__button" @click="prevMonth">&#10094;</button>
+      <base-button class="calendar-header__button" @click="prevMonth">&#10094;</base-button>
       <span>{{ currentYear }}</span>
       <span>{{ currentMonthName }}</span>
-      <button class="calendar-header__button" @click="nextMonth">&#10095;</button>
+      <base-button class="calendar-header__button" @click="nextMonth">&#10095;</base-button>
     </div>
     <div class="calendar-week">
       <div v-for="day in week" :key="day">{{ day }}</div>
@@ -25,15 +24,17 @@
 
 <script>
 import CalendarDay from '@/components/UI/Calendar/CalendarDay.vue'
+import BaseButton from '../BaseButton.vue'
 
 export default {
   components: {
     CalendarDay,
+    BaseButton,
   },
 
   data() {
     return {
-      firstDayInApp: new Date(),
+      firstDayInApp: new Date('Jun 10, 2025 23:15:30'),
       currentDate: new Date(),
       week: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
       selectedDay: null,
@@ -134,6 +135,7 @@ export default {
 }
 
 .calendar-header__button {
+  min-width: 50px;
   width: 50px;
   height: 50px;
   font-size: 2rem;

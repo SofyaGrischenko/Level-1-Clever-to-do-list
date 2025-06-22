@@ -1,6 +1,32 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc} from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 import { auth, db } from '@/services/firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+
+export const login = async (user) => {
+  try {
+    const userCredentials = await signInWithEmailAndPassword(auth, user.email, user.password)
+    console.log(userCredentials)
+
+    return userCredentials.user
+  } catch (error) {
+    let errorMessage = 'Login Error'
+
+    switch (error.code) {
+      case 'auth/invalid-email':
+        errorMessage = 'Please enter your Email'
+        break
+      case 'auth/invalid-credential':
+        errorMessage = 'Please enter valid email and password'
+        break
+      case 'auth/missing-password':
+        errorMessage = 'Please enter your password'
+        break
+    }
+
+    throw new Error(errorMessage)
+  }
+}
 
 export const registration = async (user) => {
   // const q = query(collection(db, 'users'))
