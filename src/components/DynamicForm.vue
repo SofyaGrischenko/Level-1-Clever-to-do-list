@@ -78,7 +78,7 @@ export default {
 
 <style scoped>
 .form-wrapper {
-  background-color: #ed6b34;
+  background-color: var(--accent-color);
   width: 40vw;
   height: 55vh;
   display: flex;
@@ -91,7 +91,7 @@ export default {
 
 .form__title {
   font-size: 3rem;
-  color: aliceblue;
+  color: var(--white-color);
 }
 
 .form__inputs {
@@ -107,7 +107,7 @@ export default {
 .form__buttons {
   display: flex;
   justify-content: center;
-  color: #fafafa;
+  color: var(--white-color);
 }
 
 .form__error {
@@ -115,10 +115,10 @@ export default {
   margin: 10px;
   padding: 5px;
   border: 2px solid red;
-  border-radius: 2px;
+  border-radius: 12px;
   font-weight: 800;
   font-size: 20px;
-  background-color: #ff000060;
-  color: #ffffff;
+  background-color: var(--error-bg-color);
+  color: var(--white-color);
 }
 </style>

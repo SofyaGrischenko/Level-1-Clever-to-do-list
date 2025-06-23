@@ -80,6 +80,8 @@ export default {
       try {
         const user = await registration(formValue)
         localStorage.setItem('idToken', user.accessToken)
+
+        this.$store.commit('setUser', user)
         this.$router.push('/')
       } catch (error) {
         console.error(error)

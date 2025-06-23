@@ -60,8 +60,9 @@ export default {
     async submitForm(formValue) {
       try {
         const user = await login(formValue)
-        console.log('user', user)
         localStorage.setItem('idToken', user.accessToken)
+
+        this.$store.commit('setUser', user)
         this.$router.push('/')
       } catch (error) {
         console.error(error)

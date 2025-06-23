@@ -75,18 +75,18 @@ export default {
 }
 
 .calendar-day.selected {
-  border: 3px solid #ff5517;
-  color: #ff5517;
+  border: 3px solid var(--accent-color);
+  color: var(--accent-color);
 }
 
 .calendar-day.current {
-  background-color: #000000;
-  color: aliceblue;
+  background-color: var(--black-color);
+  color: var(--white-color);
 }
 
 .calendar-day.disabled {
-  color: #565656;
-  background-color: #a3a3a3;
+  color: var(--disabled-text);
+  background-color: var(--disabled-bg);
   cursor: default;
 }
 </style>

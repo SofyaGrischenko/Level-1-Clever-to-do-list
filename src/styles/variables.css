@@ -1,0 +1,13 @@
+:root {
+  --white-color: #ffff;
+  --black-color: #000000;
+  
+  --accent-color: #ed6b34;
+  
+  --button-active: #c2582b; 
+  --error-bg-color: #ff181860;
+
+  --disabled-text: #565656;
+  --disabled-bg: #a3a3a3;
+
+}

@@ -129,7 +129,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   border-bottom: 2px solid #ccc;
   font-size: 3rem;
 }
@@ -140,8 +140,8 @@ export default {
   height: 50px;
   font-size: 2rem;
   text-align: center;
-  color: #f0f8ff;
-  background-color: #000000;
+  color: var(--white-color);
+  background-color: var(--black-color);
   border-radius: 40%;
   border: none;
 }
@@ -161,7 +161,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   padding: 10px;
 }
 </style>

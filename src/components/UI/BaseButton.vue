@@ -21,6 +21,6 @@
 }
 
 .base-button:active {
-  color: #8b3510;
+  color: var(--button-active);
 }
 </style>

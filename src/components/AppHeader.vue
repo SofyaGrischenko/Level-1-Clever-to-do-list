@@ -27,9 +27,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   width: 100vw;
-  color: #000000;
+  color: var(--black-color);
   box-shadow: 2px 2px 10px #919191;
 }
 </style>
