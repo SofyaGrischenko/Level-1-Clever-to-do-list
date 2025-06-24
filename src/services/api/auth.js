@@ -1,12 +1,15 @@
 import { doc, setDoc } from 'firebase/firestore'
-import { auth, db } from '@/services/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { db, auth } from '@/services/firebase'
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from 'firebase/auth'
 
 export const login = async (user) => {
   try {
     const userCredentials = await signInWithEmailAndPassword(auth, user.email, user.password)
-    console.log(userCredentials)
 
     return userCredentials.user
   } catch (error) {
@@ -29,18 +32,12 @@ export const login = async (user) => {
 }
 
 export const registration = async (user) => {
-  // const q = query(collection(db, 'users'))
-  // const querySnapshot = await getDocs(q)
-  // querySnapshot.forEach((doc) => {
-  //   console.log(doc.id, ' => ', doc.data())
-  // })
-
   try {
     const userCredentials = await createUserWithEmailAndPassword(auth, user.email, user.password)
 
     await setDoc(doc(db, 'users', userCredentials.user.uid), {
+      uid: userCredentials.user.uid,
       email: user.email,
-      tasks: [],
       createdAt: new Date(),
     })
 
@@ -59,8 +56,21 @@ export const registration = async (user) => {
         errorMessage = 'password must be 6 or more characters'
         break
     }
-    console.log(error.code)
+    console.error(error.code)
 
     throw new Error(errorMessage)
   }
+}
+
+export const logOut = async () => {
+  await signOut(auth)
+}
+
+export const handleGetMe = () => {
+  return new Promise((resolve) => {
+    const removeListener = onAuthStateChanged(auth, (user) => {
+      removeListener()
+      resolve(user)
+    })
+  })
 }

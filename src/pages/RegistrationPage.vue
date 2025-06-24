@@ -79,7 +79,7 @@ export default {
     async submitForm(formValue) {
       try {
         const user = await registration(formValue)
-        localStorage.setItem('idToken', user.accessToken)
+        localStorage.setItem('uid', user.uid)
 
         this.$store.commit('setUser', user)
         this.$router.push('/')

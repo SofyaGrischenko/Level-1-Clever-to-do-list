@@ -6,13 +6,12 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 })
 
-router.beforeEach((to, from, next) => {
-  // Logic to get token from localStorage
-  const token = localStorage.getItem('idToken')
-  
-  if (token && !to.meta?.isAuth) {
+router.beforeEach(async (to, from, next) => {
+  const uid = localStorage.getItem('uid')
+
+  if (uid && !to.meta?.isAuth) {
     next(to?.name === 'invalid' ? null : '/')
-  } else if (!token && to.meta?.isAuth) {
+  } else if (!uid && to.meta?.isAuth) {
     next('/login')
   } else next()
 })
