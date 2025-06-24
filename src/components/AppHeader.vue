@@ -1,20 +1,21 @@
 <template>
   <div class="header">
     <h2>Tassker</h2>
-    <base-button @click="logOut">Log Out</base-button>
+    <base-button @click="logout">Log Out</base-button>
   </div>
 </template>
 
 <script>
 import BaseButton from './UI/BaseButton.vue'
-
+import { logOut } from '@/services/api/auth'
 export default {
   components: {
     BaseButton,
   },
   methods: {
-    logOut() {
-      localStorage.removeItem('idToken')
+    logout() {
+      logOut()
+      localStorage.removeItem('uid')
       this.$router.push('/login')
     },
   },

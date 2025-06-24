@@ -29,7 +29,7 @@ export default {
 
   computed: {
     isToday() {
-      if (!this.day) return
+      if (!this.day) return false
       const today = new Date()
       return this.day.toDateString() === today.toDateString()
     },

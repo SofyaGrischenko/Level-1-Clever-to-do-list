@@ -32,12 +32,18 @@ export default {
     BaseButton,
   },
 
+  props: {
+    selectedDay: {
+      type: Date,
+      default: null,
+    },
+  },
+
   data() {
     return {
       firstDayInApp: new Date('Jun 10, 2025 23:15:30'),
       currentDate: new Date(),
       week: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-      selectedDay: null,
     }
   },
 
@@ -97,8 +103,8 @@ export default {
     },
 
     selectDay(day) {
-      if (day) {
-        this.selectedDay = this.isSelected(day) ? null : day
+      if (day && !this.isDisabled(day)) {
+        this.$emit('date-selected', day)
       }
     },
 
