@@ -1,6 +1,10 @@
 <template>
   <div class="page-wrapper">
-    <dynamic-form :inputs="inputs" @submit="submitForm" :title="'Sign up'" />
+    <dynamic-form :inputs="inputs" @submit="submitForm" :title="'Sign up'">
+      <template v-slot:errors v-if="serviceErrors">
+        <p>{{ serviceErrors }}</p>
+      </template>
+    </dynamic-form>
     <span>Already have an account?</span>
     <router-link to="/login">sign in</router-link>
   </div>
@@ -72,11 +76,14 @@ export default {
           ],
         },
       ],
+
+      serviceErrors: null,
     }
   },
 
   methods: {
     async submitForm(formValue) {
+      this.serviceErrors = null
       try {
         const user = await registration(formValue)
         localStorage.setItem('uid', user.uid)
@@ -84,8 +91,18 @@ export default {
         this.$store.commit('setUser', user)
         this.$router.push('/')
       } catch (error) {
+        this.serviceErrors = error
         console.error(error)
       }
+    },
+  },
+
+  watch: {
+    inputs: {
+      handler() {
+        this.serviceErrors = null
+      },
+      deep: true,
     },
   },
 }

@@ -2,9 +2,12 @@
   <form class="form-wrapper">
     <h1 v-if="title" class="form__title">{{ title }}</h1>
 
-    <p v-if="currentErrors?.length" class="form__error">
-      {{ currentErrors[0] }}
-    </p>
+    <div class="form__error-wrapper">
+      <p v-if="currentErrors?.length || this.$slots.errors" class="form__error">
+        {{ currentErrors[0] }}
+        <slot name="errors" />
+      </p>
+    </div>
 
     <div class="form__inputs">
       <template v-for="(item, index) of inputs" :key="index">
@@ -110,6 +113,15 @@ export default {
       if (!this.currentErrors?.length) this.$emit('submit', formData)
     },
   },
+
+  watch: {
+    inputs: {
+      handler() {
+        this.currentErrors = []
+      },
+      deep: true,
+    },
+  },
 }
 </script>
 
@@ -117,7 +129,7 @@ export default {
 .form-wrapper {
   background-color: var(--accent-color);
   width: 40vw;
-  height: 55vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -137,7 +149,7 @@ export default {
   flex-wrap: wrap;
   align-content: center;
   width: 70%;
-  margin: 30px auto;
+  margin-bottom: 30px;
   gap: 20px;
 }
 
@@ -149,16 +161,25 @@ export default {
   gap: 10px;
 }
 
+.form__error-wrapper {
+  height: 10vh;
+  display: flex;
+}
+
 .form__error {
   max-width: 400px;
   margin: 10px;
   padding: 5px;
-  border: 2px solid red;
+  border: 2px solid var(--error-bg-color);
   border-radius: 12px;
   font-weight: 800;
   font-size: 20px;
   background-color: var(--error-bg-color);
   color: var(--white-color);
+  display: inherit;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .form-textarea {

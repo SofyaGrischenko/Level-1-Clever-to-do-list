@@ -20,7 +20,7 @@ export const login = async (user) => {
         errorMessage = 'Please enter your Email'
         break
       case 'auth/invalid-credential':
-        errorMessage = 'Please enter valid email and password'
+        errorMessage = 'Please enter valid credits'
         break
       case 'auth/missing-password':
         errorMessage = 'Please enter your password'
@@ -53,7 +53,10 @@ export const registration = async (user) => {
         errorMessage = ''
         break
       case 'auth/weak-password':
-        errorMessage = 'password must be 6 or more characters'
+        errorMessage = 'Password must be 6 or more characters'
+        break
+      case 'auth/email-already-in-use':
+        errorMessage = 'This user has already been created'
         break
     }
     console.error(error.code)
