@@ -11,11 +11,18 @@
       <div class="sidebar-list-wrpa">
         <ul class="sidebar-list">
           <li v-for="task in filteredTasks" :key="task.id">
-            <input type="checkbox" />
-            <div @click="openTaskInfo(task.id, selectedDay)">
-              {{ task.title }}
-            </div>
-            
+            <label class="checkbox-container">
+              <div @click="openTaskInfo(task.id, selectedDay)" :class="{ completed: task.completed }">
+                {{ task.title }}
+              </div>
+              <input
+                type="checkbox"
+                v-model="task.completed"
+                @change="toggleTask(task)"
+                class="checkbox"
+              />
+              <span class="checkmark"></span>
+            </label>
           </li>
         </ul>
       </div>
@@ -26,7 +33,7 @@
 
 <script>
 import BaseButton from './UI/BaseButton.vue'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -87,6 +94,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['updateTask']),
     openTaskInfo(taskId) {
       if (!taskId) return
       const day = this.selectedDay.toDateString()
@@ -95,6 +103,18 @@ export default {
         params: { id: taskId },
         query: { selectedDay: day },
       })
+    },
+
+    async toggleTask(task) {
+      try {
+        const updatedTaskData = {
+          ...task,
+          completed: task.completed,
+        }
+        await this.updateTask(updatedTaskData)
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
 }
@@ -123,7 +143,6 @@ export default {
   background-color: var(--accent-color);
   color: var(--white-color);
   font-size: 1.5rem;
-
   border-bottom: 5px solid #a73c22;
 }
 
@@ -151,6 +170,14 @@ export default {
   min-width: 150px;
 }
 
+.add-btn:active {
+  border: none;
+}
+
+.sidebar-list {
+  height: 95vh;
+  overflow: auto;
+}
 .sidebar-list li {
   padding: 15px 10px;
   font-size: 1.5rem;
@@ -165,14 +192,76 @@ export default {
   color: var(--accent-color);
 }
 
-.sidebar-list {
-  height: 95vh;
-  overflow: scroll;
+.completed {
+  text-decoration:line-through;
 }
 
-.add-btn:active {
-  border: none;
+/* --------------------------- */
+
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #eee;
+   border-radius: 50%;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: var(--accent-color);
+   border-radius: 50%;
+}
+
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkmark {
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* ------------------------------- */
 
 .slide-fade-enter-active,
 .slide-fade-leave-active {

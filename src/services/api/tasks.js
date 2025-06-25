@@ -17,7 +17,15 @@ export const handleGetTasks = async (userId) => {
 
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) => {
-    tasks.push({ id: doc.id, ...doc.data() })
+    const data = doc.data()
+    tasks.push({
+      id: doc.id,
+      title: data.title,
+      description: data.description,
+      userId: data.userId,
+      completed: data.completed,
+      createdAt: data.createdAt,
+    })
   })
 
   return tasks
@@ -36,14 +44,13 @@ export const getOneTask = async (taskId) => {
 
 export const handleCreateTask = async (task, userId) => {
   try {
-    const docRef = await addDoc(collection(db, 'tasks'), {
+    await addDoc(collection(db, 'tasks'), {
       title: task.title,
       userId: userId,
       description: task.description,
       completed: false,
       createdAt: task.selectedDay,
     })
-    console.log(docRef.id)
   } catch (e) {
     console.error(e)
   }
