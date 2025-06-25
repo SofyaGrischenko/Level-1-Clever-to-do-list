@@ -1,4 +1,14 @@
-import { collection, query, where, getDocs, getDoc, doc, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore'
 import { db } from '../firebase'
 
 export const handleGetTasks = async (userId) => {
@@ -7,8 +17,7 @@ export const handleGetTasks = async (userId) => {
 
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) => {
-
-    tasks.push(doc.data())
+    tasks.push({ id: doc.id, ...doc.data() })
   })
 
   return tasks
@@ -25,11 +34,31 @@ export const getOneTask = async (taskId) => {
   }
 }
 
-export const createTask = async (task) => {
-  await setDoc(doc(db, 'tasks', task.taskId), {
-    title: task.title,
-    description: task.description,
-    creadtedAt: new Date(),
-    userId: task.userId,
-  })
+export const handleCreateTask = async (task, userId) => {
+  try {
+    const docRef = await addDoc(collection(db, 'tasks'), {
+      title: task.title,
+      userId: userId,
+      description: task.description,
+      completed: false,
+      createdAt: task.selectedDay,
+    })
+    console.log(docRef.id)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const handleUpdateTask = async (updatedData) => {
+  const docRef = doc(db, 'tasks', updatedData.id)
+
+  await updateDoc(docRef, updatedData)
+}
+
+export const handleDeleteTask = async (taskId) => {
+  try {
+    await deleteDoc(doc(db, 'tasks', taskId))
+  } catch (err) {
+    console.error(err)
+  }
 }

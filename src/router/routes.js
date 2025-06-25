@@ -1,3 +1,5 @@
+import store from '@/store'
+
 export const routes = [
   {
     path: '/registration',
@@ -7,6 +9,7 @@ export const routes = [
       isAuth: false,
     },
   },
+
   {
     path: '/login',
     name: 'login',
@@ -15,6 +18,7 @@ export const routes = [
       isAuth: false,
     },
   },
+
   {
     path: '/tasks',
     name: 'tasks',
@@ -23,6 +27,7 @@ export const routes = [
       isAuth: true,
     },
   },
+
   {
     path: '/tasks/:id',
     name: 'task',
@@ -30,11 +35,40 @@ export const routes = [
     meta: {
       isAuth: true,
     },
+    props: (route) => {
+      const id = route.params.id
+      const selectedDay = route.query.selectedDay
+
+      const isNew = id === 'new'
+
+      return { id: isNew ? null : id, isNew, selectedDay }
+    },
+
+    beforeEnter: (to, from, next) => {
+      const taskId = to.params.id
+
+      if (taskId === 'new') {
+        next()
+        return
+      }
+
+      const allTasks = store.getters.allTasks
+
+      const taskExists = allTasks.some((task) => task.id === taskId)
+
+      if (taskExists) {
+        next()
+      } else {
+        next({ name: 'invalid' })
+      }
+    },
   },
+
   {
     path: '/',
     redirect: '/tasks',
   },
+
   {
     path: '/:pathMatch(.*)*',
     name: 'invalid',

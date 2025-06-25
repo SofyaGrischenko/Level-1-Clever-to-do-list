@@ -8,15 +8,18 @@
         <h3>{{ filteredTasks.length }} tasks for {{ formattedDate }}</h3>
         <base-button class="close-btn" @click="$emit('close-sidebar')">&times;</base-button>
       </div>
-      <div class="sidebar-list">
-        <ul>
-          <li v-for="(task, i) in filteredTasks" :key="i" >
+      <div class="sidebar-list-wrpa">
+        <ul class="sidebar-list">
+          <li v-for="task in filteredTasks" :key="task.id">
             <input type="checkbox" />
-            {{ task.title }}
+            <div @click="openTaskInfo(task.id, selectedDay)">
+              {{ task.title }}
+            </div>
+            
           </li>
         </ul>
       </div>
-      <base-button class="add-btn">+Add task</base-button>
+      <base-button class="add-btn" @click="openTaskInfo('new')">+Add task</base-button>
     </div>
   </transition>
 </template>
@@ -83,6 +86,17 @@ export default {
       })
     },
   },
+  methods: {
+    openTaskInfo(taskId) {
+      if (!taskId) return
+      const day = this.selectedDay.toDateString()
+      this.$router.push({
+        name: 'task',
+        params: { id: taskId },
+        query: { selectedDay: day },
+      })
+    },
+  },
 }
 </script>
 
@@ -134,13 +148,26 @@ export default {
   align-self: center;
   position: fixed;
   bottom: 20px;
+  min-width: 150px;
 }
 
 .sidebar-list li {
-  padding: 5px 10px;
+  padding: 15px 10px;
   font-size: 1.5rem;
   font-weight: 500;
   border-bottom: 1px solid var(--black-color);
+  cursor: pointer;
+  display: flex;
+  gap: 5px;
+}
+
+.sidebar-list li:hover {
+  color: var(--accent-color);
+}
+
+.sidebar-list {
+  height: 95vh;
+  overflow: scroll;
 }
 
 .add-btn:active {

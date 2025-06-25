@@ -7,16 +7,43 @@
     </p>
 
     <div class="form__inputs">
-      <base-input
-        v-for="(item, index) of inputs"
-        v-model="item.value"
-        :key="index"
-        :type="item.type"
-        :placeholder="item.placeholder"
-      />
+      <template v-for="(item, index) of inputs" :key="index">
+        <base-input
+          v-if="item.type != 'textarea'"
+          v-model="item.value"
+          :type="item.type"
+          :placeholder="item.placeholder"
+          :name="item.field"
+        />
+        <textarea
+          v-else
+          v-model="item.value"
+          :type="item.type"
+          :placeholder="item.placeholder"
+          :name="item.field"
+          class="form-textarea"
+        />
+      </template>
     </div>
     <div class="form__buttons">
       <base-button @click.prevent="handleSubmit">{{ buttonName }}</base-button>
+
+      <base-button
+        v-if="showCancelButton"
+        type="button"
+        @click="$emit('cancel')"
+        class="cancel-button"
+      >
+        Cancel
+      </base-button>
+
+      <base-button
+        v-if="showDeleteButton"
+        type="button"
+        @click="$emit('delete')"
+        class="delete-button"
+        >Delete</base-button
+      >
     </div>
   </form>
 </template>
@@ -44,9 +71,19 @@ export default {
       type: Array,
       default: () => [],
     },
+
+    showCancelButton: {
+      type: Boolean,
+      default: false,
+    },
+
+    showDeleteButton: {
+      type: Boolean,
+      default: false,
+    },
   },
 
-  emits: ['submit'],
+  emits: ['submit', 'cancel', 'delete'],
 
   data() {
     return {
@@ -58,7 +95,7 @@ export default {
   methods: {
     async handleSubmit() {
       this.currentErrors = []
-      const form = this.inputs.reduce((acc, input) => {
+      const formData = this.inputs.reduce((acc, input) => {
         if (input?.validations?.length) {
           for (let rule of input.validations) {
             if (rule?.rule && !rule.rule(input.value)) {
@@ -70,7 +107,7 @@ export default {
         return acc
       }, {})
 
-      if (!this.currentErrors?.length) this.$emit('submit', form)
+      if (!this.currentErrors?.length) this.$emit('submit', formData)
     },
   },
 }
@@ -106,8 +143,10 @@ export default {
 
 .form__buttons {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   color: var(--white-color);
+  gap: 10px;
 }
 
 .form__error {
@@ -120,5 +159,27 @@ export default {
   font-size: 20px;
   background-color: var(--error-bg-color);
   color: var(--white-color);
+}
+
+.form-textarea {
+  width: 25vw;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-height: 100px;
+  resize: vertical;
+  border-radius: 6px;
+  border: none;
+  box-shadow: inset 3px 3px 3px #000000a4;
+  outline: none;
+  max-height: 250px;
+}
+
+.base-button {
+  min-width: 150px;
+}
+
+.delete-button {
+  width: 50px;
 }
 </style>
