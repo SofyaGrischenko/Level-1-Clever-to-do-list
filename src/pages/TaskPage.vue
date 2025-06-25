@@ -4,7 +4,7 @@
       class="task-form"
       :title="isNew ? 'Create New Task' : 'Edit Task'"
       :inputs="inputs"
-      :button-name="isNew ? 'create' : 'save'"
+      :button-name="isNew ? 'Create' : 'Save'"
       :show-cancel-button="true"
       :show-delete-button="!isNew"
       @submit="saveTask"

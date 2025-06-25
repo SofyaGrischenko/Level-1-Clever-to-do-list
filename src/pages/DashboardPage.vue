@@ -1,5 +1,9 @@
 <template>
-  <custom-calendar :selectedDay="selectedDay" @date-selected="handleDayClick" />
+  <custom-calendar
+    :selectedDay="selectedDay"
+    @date-selected="handleDayClick"
+    :first-day-in-app="firstDayInApp"
+  />
 
   <side-bar :isOpen="isSidebarOpen" :selectedDay="selectedDay" @closeSidebar="closeSidebar" />
 </template>
@@ -24,6 +28,15 @@ export default {
 
   computed: {
     ...mapGetters(['currentUser']),
+
+    firstDayInApp() {
+      if (this.currentUser) {
+        const createdAt = new Date(this.currentUser.metadata.creationTime)
+        createdAt.setDate(createdAt.getDate() - 1)
+        return createdAt
+      }
+      return new Date('1970')
+    },
   },
 
   methods: {
