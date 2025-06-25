@@ -16,6 +16,7 @@
         :day="day"
         :selected="isSelected(day)"
         :disabled="isDisabled(day)"
+        :day-tasks="getTasksForDay(day)"
         @select="selectDay"
       />
     </div>
@@ -25,6 +26,7 @@
 <script>
 import CalendarDay from '@/components/UI/Calendar/CalendarDay.vue'
 import BaseButton from '../BaseButton.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -37,23 +39,29 @@ export default {
       type: Date,
       default: null,
     },
+
+    firstDayInApp: {
+      type: Date,
+      default: null,
+    },
   },
 
   data() {
     return {
-      firstDayInApp: new Date('Jun 10, 2025 23:15:30'),
       currentDate: new Date(),
       week: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
     }
   },
 
   computed: {
+    ...mapGetters(['allTasks', 'currentUser']),
+
     currentMonthName() {
       return this.currentDate.toLocaleString('en-US', { month: 'long' })
     },
 
     currentYear() {
-      return this.currentDate.getUTCFullYear()
+      return this.currentDate.getFullYear()
     },
 
     calendarDays() {
@@ -116,6 +124,38 @@ export default {
     isDisabled(day) {
       if (!day) return false
       return day < this.firstDayInApp
+    },
+
+    getTasksForDay(day) {
+      if (!day) return []
+
+      const dayYear = day.getFullYear()
+      const dayMonth = day.getMonth()
+      const dayDate = day.getDate()
+
+      return this.allTasks.filter((task) => {
+        if (!task || !task.createdAt) {
+          return false
+        }
+
+        let taskDate
+        if (task.createdAt instanceof Date) {
+          taskDate = task.createdAt
+        } else if (typeof task.createdAt === 'string') {
+          taskDate = new Date(task.createdAt)
+        }
+
+        if (isNaN(taskDate.getTime())) {
+          console.warn('Invalid task.createdAt date format', task)
+          return false
+        }
+
+        return (
+          taskDate.getFullYear() === dayYear &&
+          taskDate.getMonth() === dayMonth &&
+          taskDate.getDate() === dayDate
+        )
+      })
     },
   },
 }

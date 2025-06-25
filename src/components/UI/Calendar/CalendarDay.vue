@@ -4,7 +4,9 @@
       <p>
         {{ day.getDate() }}
       </p>
-      <!-- <p>&#9711;</p> -->
+      <div class="task-dots" v-if="!disabled">
+        <span v-for="i in taskCount" :key="i" class="dot"></span>
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +27,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    dayTasks: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   computed: {
@@ -41,6 +48,10 @@ export default {
         current: this.day && this.isToday,
         disabled: this.day && this.disabled,
       }
+    },
+
+    taskCount() {
+      return Math.min(this.dayTasks.length, 3)
     },
   },
 
@@ -88,5 +99,18 @@ export default {
   color: var(--disabled-text);
   background-color: var(--disabled-bg);
   cursor: default;
+}
+
+.task-dots {
+  display: flex;
+  gap: 3px;
+  margin-top: 5px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
 }
 </style>
