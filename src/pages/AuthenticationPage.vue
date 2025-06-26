@@ -6,7 +6,7 @@
       </template>
     </dynamic-form>
     <span>New to this app?</span>
-    <router-link to="/registration">sign up</router-link>
+    <router-link  to="/registration">sign up</router-link>
   </div>
 </template>
 
